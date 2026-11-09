@@ -363,6 +363,7 @@
       const SC = CONFIG.schedules;
       const fill = (id, arr, fn) => ($(id).innerHTML = arr.map(fn).join(""));
       const waHref = (n, msg) => `https://wa.me/${S["wa_contact_" + n].replace(/\D/g, "").replace(/^0/, "62")}${msg ? "?text=" + encodeURIComponent(msg) : ""}`;
+      const WA_ORDER = [2, 1]; // urutan kontak WhatsApp: Admin (2) di atas, Ms. Mario (1) di bawah
       const WA_MSG = "Halo, saya ingin bertanya tentang Baksos TCM Selatpanjang 2026.";
       const WA_CARD = "bg-[#F5EFE6] dark:bg-emerald-950/70 border border-amber-300 dark:border-emerald-800 hover:border-green-700 transition";
       const NAV = [
@@ -420,7 +421,7 @@
         document.querySelectorAll("#logos img").forEach((img, i) => (img.src = LOGOS[i]));
 
         // WhatsApp (daftar di bagian pendaftaran + panel melayang)
-        fill("wa-list", [1, 2], (n) => `
+        fill("wa-list", WA_ORDER, (n) => `
           <a href="${waHref(n)}" target="_blank" rel="noopener" class="flex items-center gap-4 p-4 rounded-2xl ${WA_CARD} group">
             <div class="w-12 h-12 rounded-full bg-green-800 text-white flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition"><i class="fa-brands fa-whatsapp"></i></div>
             <div>
@@ -428,7 +429,7 @@
               <div class="text-xs font-bold text-slate-600 dark:text-slate-400">(${S["wa_name_" + n]}) — Klik untuk Chat WA</div>
             </div>
           </a>`);
-        fill("wa-admins", [2, 1], (n) => `
+        fill("wa-admins", WA_ORDER, (n) => `
           <a href="${waHref(n, WA_MSG)}" target="_blank" rel="noopener" class="flex items-center gap-2.5 px-2.5 py-2 sm:gap-3.5 sm:px-4 sm:py-3.5 rounded-xl sm:rounded-2xl dark:hover:border-emerald-500 ${WA_CARD}">
             <i class="fa-brands fa-whatsapp text-[26px] sm:text-[44px] leading-none text-[#25D366] shrink-0"></i>
             <span class="min-w-0 flex-1">
