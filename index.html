@@ -442,13 +442,12 @@
 
         // WhatsApp (daftar di bagian pendaftaran + panel melayang)
         fill("wa-list", WA_ORDER, (n) => `
-          <a href="${waHref(n)}" target="_blank" rel="noopener" class="flex items-center gap-4 p-4 rounded-2xl ${WA_CARD} group">
+          <a href="${waHref(n)}" target="_blank" rel="noopener" class="flex items-center gap-4 p-5 rounded-2xl ${WA_CARD} group">
             <div class="w-12 h-12 rounded-full bg-green-800 text-white flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition"><i class="fa-brands fa-whatsapp"></i></div>
             <div>
-              <div class="text-base sm:text-lg font-extrabold text-green-950 dark:text-amber-200">${S["wa_contact_" + n]}</div>
+              <div class="text-lg sm:text-xl font-extrabold text-green-950 dark:text-amber-200">${S["wa_contact_" + n]}</div>
               <div class="text-xs font-bold text-slate-600 dark:text-slate-400">(${S["wa_name_" + n]}) — Klik untuk Chat WA</div>
             </div>
-            <span class="ml-auto shrink-0 rounded-full bg-green-800 group-hover:bg-green-700 text-white text-xs font-bold px-4 py-2 transition">Chat</span>
           </a>`);
         fill("wa-admins", WA_ORDER, (n) => `
           <a href="${waHref(n, WA_MSG)}" target="_blank" rel="noopener" class="flex items-center gap-2.5 px-2.5 py-2 sm:gap-3.5 sm:px-4 sm:py-3.5 rounded-xl sm:rounded-2xl dark:hover:border-emerald-500 ${WA_CARD}">
