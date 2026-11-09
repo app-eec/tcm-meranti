@@ -201,7 +201,7 @@
               <span class="h-0.5 w-8 sm:w-12 bg-amber-500"></span>
             </div>
             <h2 class="font-serif text-3xl sm:text-4xl font-black text-green-950 dark:text-amber-50 uppercase tracking-wide">JENIS <span class="text-amber-600">PELAYANAN</span></h2>
-            <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2">Pilih jenis pelayanan yang sesuai dengan kebutuhan Anda untuk mendapatkan layanan yang tepat.</p>
+            <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2">Silakan pilih jenis pelayanan yang sesuai dengan kebutuhan Anda untuk mendapatkan layanan yang tepat.</p>
           </div>
           <div id="services-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6"></div>
         </section>
@@ -273,7 +273,7 @@
                   <h3 class="font-serif text-xl sm:text-2xl font-black text-green-950 dark:text-amber-50">Formulir Pendaftaran Online</h3>
                   <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">Berikut daftar isian pada Google Form, Tanda * wajib diisi.</p>
                 </div>
-                <div id="gform-fields" class="space-y-4"></div>
+                <a id="gform-fields" target="_blank" rel="noopener" aria-label="Buka Google Form pendaftaran" class="block space-y-4 cursor-pointer"></a>
                 <a id="gform-btn" target="_blank" rel="noopener" class="mt-auto w-full sm:w-auto sm:self-start justify-center inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-sm px-7 py-3.5 shadow-lg shadow-orange-500/30 transition"><i class="fa-solid fa-paper-plane"></i> Isi Formulir Pendaftaran</a>
               </div>
             </div>
@@ -293,7 +293,7 @@
           <div class="flex items-start justify-between gap-2 sm:gap-3 px-3 py-2 sm:px-4 sm:py-3.5 bg-gradient-to-r from-green-950 to-green-800 text-amber-50">
             <div>
               <div class="font-serif font-black text-[13px] sm:text-base leading-tight">Hubungi Panitia</div>
-              <div class="text-[10px] sm:text-[11px] text-amber-200/90 mt-0.5">Chat via WhatsApp</div>
+              <div class="text-[10px] sm:text-[11px] text-amber-200/90 mt-0.5">Pilih admin untuk chat via WhatsApp</div>
             </div>
             <button data-wa="close" type="button" aria-label="Tutup" class="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs sm:text-sm transition"><i class="fa-solid fa-xmark"></i></button>
           </div>
@@ -461,6 +461,7 @@
         // QR & formulir
         $("qr-img").src = S.qr_image_url;
         $("gform-btn").href = S.form_url;
+        $("gform-fields").href = S.form_url;
         fill("gform-fields", FORM_FIELDS, (sec) => `
           <div class="flex items-center gap-3 pt-2"><span class="font-serif font-extrabold text-xs uppercase tracking-wider text-amber-700 dark:text-amber-400">${sec.title}</span><span class="h-px flex-1 bg-amber-300/60 dark:bg-emerald-800"></span></div>
           ${sec.rows.map((r) => `<div class="${r.length > 1 ? "grid sm:grid-cols-2 gap-3 sm:gap-4 sm:items-end" : ""}">${r.map(fieldHTML).join("")}</div>`).join("")}`);
