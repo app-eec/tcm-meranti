@@ -49,24 +49,40 @@
       @keyframes float { 50% { transform: translateY(calc(-8px * var(--d, 1))) rotate(calc(2deg * var(--d, 1))); } }
       .animate-float { animation: float 4.5s ease-in-out infinite; }
       .animate-float-reverse { --d: -0.9; animation: float 5s ease-in-out infinite; }
-      @media (prefers-reduced-motion: reduce) {
-        .animate-float, .animate-float-reverse, #wa-fab { animation: none; }
-        #wa-panel { transition: none; }
-      }
 
       /* Latar ambient */
       .tcm-ambient-bg { background-image: radial-gradient(circle at 10% 15%, rgba(21, 128, 61, 0.08) 0%, transparent 45%), radial-gradient(circle at 90% 25%, rgba(217, 119, 6, 0.1) 0%, transparent 50%), radial-gradient(circle at 50% 85%, rgba(20, 83, 45, 0.07) 0%, transparent 60%); }
-      .dark .tcm-ambient-bg { background-image: radial-gradient(circle at 15% 15%, rgba(21, 128, 61, 0.15) 0%, transparent 50%), radial-gradient(circle at 85% 25%, rgba(217, 119, 6, 0.1) 0%, transparent 50%); }
 
       /* Bingkai emas */
       .ornament-frame { --g: 253, 251, 247; border: 2px solid #d97706; box-shadow: inset 0 0 0 3px rgba(var(--g), 0.9), inset 0 0 0 4.5px rgba(217, 119, 6, 0.45); }
-      .dark .ornament-frame { --g: 11, 25, 17; }
+      .dark .ornament-frame { --g: 11, 25, 17; border-color: #e0a030; box-shadow: inset 0 0 0 3px rgba(var(--g), 0.9), inset 0 0 0 4.5px rgba(217, 119, 6, 0.45), 0 0 28px rgba(217, 119, 6, 0.08); }
 
       /* Link navigasi desktop */
       .nav-link { padding-bottom: 0.25rem; transition: color 0.15s; }
       .nav-link:hover, .nav-link.on { color: #166534; }
       .dark .nav-link:hover, .dark .nav-link.on { color: #fbbf24; }
       .nav-link.on { border-bottom: 2px solid #f59e0b; }
+
+      /* Tampilan ekstra: reveal, pembatas, kartu, progres */
+      .rv { opacity: 0; transform: translateY(18px); transition: opacity 0.6s, transform 0.6s; }
+      .rv.in { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) { .animate-float, .animate-float-reverse, #wa-fab { animation: none; } #wa-panel { transition: none; } .rv { opacity: 1; transform: none; transition: none; } }
+      .divider { height: 1px; margin: 0.5rem 0; background: linear-gradient(90deg, transparent, #d97706, transparent); }
+      .svc { position: relative; }
+      .svc:hover { box-shadow: 0 0 0 1px #f59e0b, 0 12px 35px rgba(217, 119, 6, 0.28); }
+      .svc .no { position: absolute; top: 0.7rem; left: 0.9rem; font: 800 0.65rem "Playfair Display", serif; color: #d97706; letter-spacing: 0.1em; }
+      .svc h3::after { content: ""; display: block; width: 2rem; height: 2px; margin: 0.5rem auto 0; border-radius: 9px; background: #f59e0b; }
+      @media (min-width: 640px) { #schedules-grid > div { position: relative; } #schedules-grid > div + div::before { content: ""; position: absolute; left: -1.5rem; top: 50%; width: 1.5rem; border-top: 2px dashed #f59e0b; } }
+      #progress { transition: transform 0.1s linear; }
+
+      /* Dark mode: gradasi hijau-emas lebih halus, kontras emas lebih nyaman */
+      .dark #app { background-image: radial-gradient(ellipse at 50% -10%, rgba(21, 128, 61, 0.18), transparent 55%), linear-gradient(180deg, #07120c 0%, #0a1810 50%, #07120c 100%); }
+      .dark .divider { background: linear-gradient(90deg, transparent, #e0a030aa, transparent); }
+      .dark .svc { background-image: linear-gradient(160deg, rgba(21, 128, 61, 0.12), transparent 60%); }
+      .dark .svc:hover { box-shadow: 0 0 0 1px #e0a030, 0 12px 35px rgba(224, 160, 48, 0.22); }
+      .dark .svc .no { color: #fbbf24; }
+      .dark #schedules-grid > div { background-image: linear-gradient(160deg, rgba(224, 160, 48, 0.08), transparent 70%); }
+      .dark #progress { box-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
     </style>
   </head>
   <body>
@@ -76,6 +92,7 @@
     </div>
 
     <div id="app" class="bg-[#FDFBF7] dark:bg-[#07120C] text-slate-800 dark:text-slate-100 transition-colors duration-300 tcm-ambient-bg relative">
+      <div id="progress" class="fixed top-0 left-0 h-[3px] w-full origin-left bg-gradient-to-r from-green-700 via-amber-400 to-amber-600 z-[70]" style="transform: scaleX(0)"></div>
       <!-- NAVBAR -->
       <header class="sticky top-2 sm:top-4 z-50 px-2 sm:px-6 pt-2">
         <nav class="max-w-6xl mx-auto rounded-full bg-gradient-to-r from-[#FDFBF7]/95 via-white/95 to-[#FDFBF7]/95 dark:from-[#0D1F15]/95 dark:via-[#11261B]/95 dark:to-[#0D1F15]/95 backdrop-blur-md shadow-[0_8px_30px_rgb(20,83,45,0.08)] border border-amber-300/70 dark:border-emerald-800/80 px-3 sm:px-7 py-2 sm:py-2.5 flex items-center justify-between gap-2">
@@ -121,8 +138,10 @@
               </div>
               <div id="hanzi" class="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-1"></div>
               <p data-t="hero_desc" class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0"></p>
-              <div class="flex justify-center lg:justify-start pt-2">
+              <div id="countdown" class="space-y-2 text-center lg:text-left"></div>
+              <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 pt-2">
                 <button data-go="register" class="inline-flex items-center justify-center w-full sm:w-auto bg-gradient-to-r from-green-900 to-green-700 hover:from-green-800 hover:to-green-600 text-white font-bold text-sm px-10 py-3.5 rounded-full shadow-lg shadow-green-900/25 border border-amber-400/60 transition-all active:scale-95">Hubungi Kami</button>
+                <button data-go="schedule" class="inline-flex items-center justify-center w-full sm:w-auto border-2 border-amber-500 text-green-900 dark:text-amber-300 hover:bg-amber-500/10 font-bold text-sm px-10 py-3.5 rounded-full transition-all active:scale-95">Lihat Jadwal</button>
               </div>
             </div>
 
@@ -330,6 +349,7 @@
           hero_tagline: "& PEMBAGIAN HERBAL GRATIS",
           hero_desc: "Hadir melayani masyarakat Kabupaten Kepulauan Meranti dengan terapi kesehatan holistik Tiongkok: Akupuntur, Bekam, Konsultasi Kesehatan, Auriculotherapy, serta Pembagian Herbal Gratis.",
           max_quota: 200,
+          event_start: "2026-11-21T13:30:00+07:00", // dipakai hitung mundur di hero
           location_name: "VIHARA HARMONIS MAITREYA",
           location_address: "Jl. Bihun No. 76, Selatpanjang, Kep. Meranti",
           wa_contact_1: "0852 7469 7388",
@@ -428,6 +448,7 @@
               <div class="text-base sm:text-lg font-extrabold text-green-950 dark:text-amber-200">${S["wa_contact_" + n]}</div>
               <div class="text-xs font-bold text-slate-600 dark:text-slate-400">(${S["wa_name_" + n]}) — Klik untuk Chat WA</div>
             </div>
+            <span class="ml-auto shrink-0 rounded-full bg-green-800 group-hover:bg-green-700 text-white text-xs font-bold px-4 py-2 transition">Chat</span>
           </a>`);
         fill("wa-admins", WA_ORDER, (n) => `
           <a href="${waHref(n, WA_MSG)}" target="_blank" rel="noopener" class="flex items-center gap-2.5 px-2.5 py-2 sm:gap-3.5 sm:px-4 sm:py-3.5 rounded-xl sm:rounded-2xl dark:hover:border-emerald-500 ${WA_CARD}">
@@ -450,8 +471,8 @@
         fill("nav-mobile", NAV, (n) => `<a href="#${n[0]}" data-go="${n[0]}" class="px-4 py-3 rounded-xl hover:bg-amber-50 dark:hover:bg-emerald-900/50 text-green-900 dark:text-amber-200">${n[2]}</a>`);
 
         // Layanan
-        fill("services-grid", CONFIG.services, (s) => `
-          <div class="group last:odd:col-span-2 sm:last:odd:col-span-1 bg-white dark:bg-[#0D1E14] rounded-3xl p-3 sm:p-6 border border-amber-300/80 dark:border-emerald-800 shadow-[0_8px_25px_rgb(20,83,45,0.06)] sm:hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center text-center sm:min-h-[260px]">
+        fill("services-grid", CONFIG.services, (s, i) => `
+          <div class="group svc last:odd:col-span-2 sm:last:odd:col-span-1 bg-white dark:bg-[#0D1E14] rounded-3xl p-3 sm:p-6 border border-amber-300/80 dark:border-emerald-800 shadow-[0_8px_25px_rgb(20,83,45,0.06)] sm:hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center text-center sm:min-h-[260px]"><span class="no">0${i + 1}</span>
             <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full p-1.5 bg-gradient-to-tr from-amber-600 via-amber-300 to-amber-500 shadow-lg mb-4 sm:mb-5 group-hover:scale-105 transition-transform duration-300">
               <div class="w-full h-full rounded-full overflow-hidden bg-green-950"><img src="${s.image}" alt="${s.name}" loading="lazy" class="w-full h-full object-cover" /></div>
             </div>
@@ -460,13 +481,14 @@
 
         // Galeri
         fill("gallery-grid", GALLERY, (g, i) => `
-          <button type="button" data-open="${i}" aria-label="Perbesar foto ${i + 1}" class="group relative aspect-square rounded-2xl overflow-hidden bg-white dark:bg-emerald-950 border-2 border-amber-300/70 dark:border-emerald-800 shadow-sm hover:border-amber-500 transition">
+          <button type="button" data-open="${i}" aria-label="Perbesar foto ${i + 1}" class="group relative aspect-square rounded-2xl overflow-hidden bg-white dark:bg-emerald-950 border-[3px] border-amber-400/80 dark:border-amber-700/70 shadow-md hover:border-amber-500 transition">
             <img src="${g.src}" alt="${g.alt}" loading="lazy" style="object-position:center ${g.pos}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <span class="absolute inset-0 flex items-end justify-between gap-2 p-2.5 text-left bg-gradient-to-t from-green-950/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition"><span class="text-[10px] sm:text-xs font-bold text-amber-100 leading-tight">${g.alt}</span><i class="fa-solid fa-magnifying-glass-plus text-amber-300"></i></span>
           </button>`);
 
         // Jadwal
-        fill("schedules-grid", SC, (s, i) => `
-          <div class="${i ? "sm:border-l-2 sm:border-amber-400/60 sm:pl-6" : ""} flex flex-col justify-center">
+        fill("schedules-grid", SC, (s) => `
+          <div class="rounded-2xl border-2 border-dashed border-amber-400/70 bg-[#FAF5E8] dark:bg-emerald-950/50 p-4 sm:p-5 flex flex-col justify-center">
             <div class="text-sm sm:text-base font-extrabold text-green-900 dark:text-amber-300 uppercase tracking-wider">${s.day_name}</div>
             <div class="flex items-center gap-3 my-1.5">
               <span class="font-serif font-black text-5xl sm:text-6xl text-green-950 dark:text-white leading-none">${s.date_number}</span>
@@ -538,29 +560,43 @@
       };
       $("menu-btn").onclick = () => $("nav-mobile").classList.toggle("hidden");
 
-      // Scroll-spy hanya untuk menu desktop (tidak dijalankan di HP)
-      const desktop = matchMedia("(min-width: 768px)");
+      // Scroll: scroll-spy menu desktop, bilah progres
+      const sc = $("app"),
+        desktop = matchMedia("(min-width: 768px)");
       let ticking = false;
       function spy() {
         ticking = false;
         if (!desktop.matches) return;
         let at = NAV[0][0];
-        NAV.forEach((n) => {
-          if ($(n[0]).getBoundingClientRect().top <= 180) at = n[0];
-        });
+        NAV.forEach((n) => $(n[0]).getBoundingClientRect().top <= 180 && (at = n[0]));
         document.querySelectorAll("#nav-desktop .nav-link").forEach((a) => a.classList.toggle("on", a.dataset.go === at));
       }
-      $("app").addEventListener(
-        "scroll",
-        () => {
-          if (!ticking && desktop.matches) {
-            ticking = true;
-            requestAnimationFrame(spy);
-          }
-        },
-        { passive: true },
-      );
+      sc.addEventListener("scroll", () => {
+        const max = sc.scrollHeight - sc.clientHeight;
+        $("progress").style.transform = `scaleX(${max > 0 ? sc.scrollTop / max : 0})`;
+        if (!ticking && desktop.matches) (ticking = true), requestAnimationFrame(spy);
+      }, { passive: true });
       desktop.addEventListener("change", spy);
+
+      // Pembatas antar bagian & animasi muncul saat scroll
+      document.querySelectorAll("main section + section").forEach((el) => el.insertAdjacentHTML("beforebegin", '<div class="divider" aria-hidden="true"></div>'));
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: 0.08 });
+        document.querySelectorAll("main section, footer").forEach((el) => (el.classList.add("rv"), io.observe(el)));
+      }
+
+      // Hitung mundur
+      const target = new Date(S.event_start).getTime();
+      function tick() {
+        const d = Math.max(0, target - Date.now()),
+          v = [d / 864e5, (d / 36e5) % 24, (d / 6e4) % 60, (d / 1e3) % 60],
+          l = ["Hari", "Jam", "Menit", "Detik"];
+        $("countdown").innerHTML = d
+          ? `<p class="text-[11px] font-extrabold uppercase tracking-widest text-amber-700 dark:text-amber-400">Kegiatan dimulai dalam</p><div class="flex justify-center lg:justify-start gap-2 sm:gap-3">${v.map((n, i) => `<div class="min-w-[3.6rem] sm:min-w-[4.2rem] rounded-xl bg-green-950 text-amber-100 border border-amber-400 px-2 py-2 text-center"><div class="font-serif font-black text-xl sm:text-2xl leading-none">${String(Math.floor(n)).padStart(2, "0")}</div><div class="text-[10px] font-bold text-amber-300/90 mt-1 uppercase">${l[i]}</div></div>`).join("")}</div>`
+          : `<p class="text-sm font-extrabold text-green-900 dark:text-amber-300">Kegiatan telah dimulai</p>`;
+      }
+      tick();
+      setInterval(tick, 1000);
 
       render();
       spy();
